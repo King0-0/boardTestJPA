@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h2>게시물 수정</h2>
+	<hr>
+	<form action="/board/update" method="post" enctype="multipart/form-data">
+	<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+	<input type="hidden" name="no" th:value="${b.no}">
+	
+	 	<!-- 부모글번호 -->
+		글번호 : <input type="hidden" name="no" th:value="${b.no}"/>	
+		<!-- 원래 파일 이름 전달하기 위함 -->
+		<input type="hidden" name="fname" th:value="${b.fname}"/>	
+		글제목 : <input type="text" name="title" th:value="${b.title}"/><br />
+		작성자 : <span th:text="${b.member.id}"></span> <br />
+		글암호 : <input type="password" name="pwd" /><br />
+		글내용 : <br />
+		<textarea name="content"  cols="60" rows="10" th:value="${b.content}" th:text="${b.content}"></textarea><br />
+		<!-- 첨부파일 : <input type="text" name="fname"/><br /> -->
+		첨부파일 : <span th:text="${b.fname}"></span> 
+		<input type="file" name="uploadFile"/><br />
+		<input type="submit" value="수정"/>
+		<input type="reset" value="다시입력"/>
+		<a href="board/list">전체목록</a>
+	</form>
+</body>
+</html>

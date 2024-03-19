@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h2>게시물 상세보기</h2>	
+	글번호 : <span th:text="${b.no}"></span><br>
+	제목 : <span th:text="${b.title}"></span><br>
+	작성자 : <span th:text="${b.member.id}"></span><br>
+	글 내용 : <br/>
+	<textarea cols="30" rows="10" th:text="${b.content}" 
+			th:value="${b.content}" readonly></textarea> <br>
+	등록일 : <span th:text="${b.regdate}"></span><br>
+	
+	
+	<!-- 파일업로드 -->
+	<div th:if="${b.fname} != null">
+		
+		<!-- 이미지 파일이면 출력 -->
+		<!-- 파일이름 마지막이 jpg, png 등으로 끝나는지? -->
+		<div th:if="${#strings.endsWith(b.fname,'.jpg')} or ${#strings.endsWith(b.fname,'.gif')} or ${#strings.endsWith(b.fname,'.png')}">
+			<img th:src="@{'/images/'+${b.fname}}"  
+				width="100" height="100"/>
+		</div>	
+		
+		<!-- 이미지 파일이 아니면!! ==>조건부적합 : unless -->
+		<div th:unless="${#strings.endsWith(b.fname,'.jpg')} or ${#strings.endsWith(b.fname,'.gif')} or ${#strings.endsWith(b.fname,'.png')}">
+			<a th:href="@{'/images/'+${b.fname}}" 
+					th:text="${b.fname}"></a>
+		</div>
+
+	</div>
+	<hr/>
+	<!-- 답글작성하기 -->
+	<!-- <a th:href="@{'/board/insert/'+${b.no}}" th:text="답글작성"></a> -->
+	<a th:href="@{/board/insert(no=${b.no})}">답글작성</a>
+	<a href="/board/list/1">전체목록</a>
+	<!-- 쿼리스트링이 아닌 URI  방식 -->
+	<a th:href="@{'/board/update/'+${b.no}}">수정하기</a>
+	<a th:href="@{'/board/delete/'+${b.no}}">삭제하기</a>
+	
+</body>
+</html>

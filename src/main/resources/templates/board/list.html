@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="htpp://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>	
+	<!-- 관리자 계정으로 로그인하면 관리자전용 링크 출력 -->
+	<th:block th:if="${session.loginUSER.role} == 'admin'">
+		<a href="/admin/index">관리자메뉴</a>
+	</th:block>
+	
+	<!-- 로그인 유저 아이디 출력 -->
+	<span th:text="${session.loginUSER.id}+'('+${session.loginUSER.name}+')님 로그인 하였습니다.'"></span>
+	
+	<!-- 로그인되어 있으면 로그아웃 글자 표시 -->
+	<th:block th:if="${session.loginUSER != null}">
+		<a href="/logout">로그아웃</a>
+	</th:block> <br>
+	
+
+	
+	
+	<h2>게시물 목록</h2>
+	<hr />
+	<a href="/board/insert">등록</a>
+	<!-- 내 글 보기 -->
+	<a th:href="@{'/board/list/1/'+${session.loginUSER.id}}">내글보기</a>
+	<a href="/board/list/1/all">모두출력</a>
+	
+	<br />
+	<table border="1" width="80%">
+		<tr>
+			<th>글번호</th>
+			<th>글제목</th>
+			<th>작성자</th>
+			<th>등록일</th>
+		</tr>
+		<tr th:each="b:${list}">
+			<td th:text="${b.no}"></td>
+			<td>
+			<!-- 줄이 바뀌면 안돼서 span 사용 -->
+				<span th:if="${b.b_level>0}">	<!-- 답글이라면 화살표 출력 -->
+				<!-- 답글의 깊이만큼 공백추가 -->
+				<!-- 1부터 b_level까지 레벨만큼 공백을 표현함 -->
+					<span th:each="i:${#numbers.sequence(1,b.b_level)}">&nbsp;&nbsp;</span>	
+					-->
+				</span>
+				<!-- <a th:href="@{/board/detail(no=${b.no})}"><span th:text="${b.title}"></span></a> -->
+				<!-- uri 형식으로 바꾸기 -->
+				<a th:href="@{'/board/detail/'+${b.no}}" th:text="${b.title}"></a>				
+			</td>
+			
+			<td><a th:href="@{'/board/list/'+${b.member.id}}" th:text="${b.member.id}"></a></td>
+<!-- 		<td th:text="${b.member.id}"></td> -->
+			<td th:text="${b.regdate}"></td>
+		</tr>
+	</table>
+
+	<br>
+	<br>
+	<hr/>
+	
+<!-- 페이징처리  -->
+	<th:block th:each = "i:${#numbers.sequence(1,totalPage)}">
+		<a th:href="@{'/board/list/'+${i}}" th:text="${i}"></a>
+	</th:block>
+	
+</body>
+</html>
