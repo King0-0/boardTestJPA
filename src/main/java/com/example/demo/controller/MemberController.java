@@ -41,5 +41,7 @@ public class MemberController {
 		String view = "redirect:index";
 		ms.delete(id);
 		return view;
+
 	}
+
 }
